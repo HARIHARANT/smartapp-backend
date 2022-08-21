@@ -231,8 +231,8 @@ app.get("/", async (req, res, next) => {
 mongoose
 .connect("mongodb+srv://devenv:devenv@cluster0.xj3j5.mongodb.net/smartdeliveryapp?retryWrites=true&w=majority")
 .then(() => {
-	app.listen(process.env.PORT || 3000, () => {
-	console.log(`Server is listening on ports ${process.env.PORT}`);
+	app.listen(process.env.PORT, () => {
+	console.log("Server is listening on port "+process.env.PORT);
 	});
 })
 .catch((err) => {
