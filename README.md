@@ -1,3 +1,3 @@
 # smartapp-backend
 
-deployed url: https://smartapplications.herokuapp.com/
+deployed url: https://s-martapp-backend.herokuapp.com
