@@ -150,7 +150,7 @@ app.post("/add/cart", verifyToken, async (req, res, next) => {
 	let existingProduct;
 	let newCart;
 	try {
-		existingProduct = await Cart.findOne({ productId: productId });
+		existingProduct = await Carts.findOne({ productId: productId });
 		console.log("existingProduct::")
 		console.log(existingProduct)
 	} catch {
@@ -169,7 +169,7 @@ app.post("/add/cart", verifyToken, async (req, res, next) => {
 			errorCode: "PRODUCT_EXISTS"
 		})		
 	}else{
-		newCart = await Cart({		
+		newCart = await Carts({		
 			userId,
 			productId
 		});
@@ -191,7 +191,7 @@ app.post("/add/cart", verifyToken, async (req, res, next) => {
 	}		
 });
 
-app.post("/get/cart", async (req, res, next) => {
+app.post("/get/cart",verifyToken, async (req, res, next) => {
 	console.log("Inside get cart::");
 	console.log( req.body);
 	const { userId } = req.body;
