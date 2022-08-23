@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
 const User = require("./model/users")
 const ProductsRecord = require("./model/products");
-const Cart = require("./model/cart");
+const Carts = require("./model/cart");
 const dotenv = require("dotenv");
 const bcrypt = require("bcrypt");
 const cors = require("cors");
@@ -191,19 +191,43 @@ app.post("/add/cart", verifyToken, async (req, res, next) => {
 	}		
 });
 
-app.get("/get/cart",verifyToken, async (req, res, next) => {
+app.post("/get/cart", async (req, res, next) => {
 	console.log("Inside get cart::");
 	console.log( req.body);
 	const { userId } = req.body;
+	
 	try{
-		Cart.find({userId:userId},function(err,data){
-			res
-			.status(200)
-			.json({
-			success: true,
-			data: { records: data },
-			});	
-		})	
+		console.log("userId:"+ userId.toString());
+		Carts.aggregate([
+			{
+				$match:{userId:{$eq:userId.toString()}}
+			},
+			{
+				$lookup:{
+						  from: 'products',
+						  localField:"productId",
+						  foreignField:"id",
+						  as: 'productsData'
+				}
+			}
+		],function (error, data) {
+			if(data.length > 0){
+				res
+				.status(200)
+				.json({
+				success: true,
+				data: data
+				});
+			}else{
+				res
+				.status(200)
+				.json({
+				success: true,
+				data: []
+				});
+			}
+			         	
+		});		
 	}catch(e){
 		res.send({
 			status:false,
@@ -232,7 +256,7 @@ mongoose
 .connect("mongodb+srv://devenv:devenv@cluster0.xj3j5.mongodb.net/smartdeliveryapp?retryWrites=true&w=majority")
 .then(() => {
 	app.listen(process.env.PORT, () => {
-	console.log("Server is listening on port "+process.env.PORT);
+	console.log("Server is listening on port"+process.env.PORT);
 	});
 })
 .catch((err) => {
