@@ -6,4 +6,4 @@ const cartSchema = new mongoose.Schema({
     createdAt:{type:Date, default:Date.now}
 });
 
-module.exports = Cart = mongoose.model('Cart', cartSchema);
+module.exports = Carts = mongoose.model('Carts', cartSchema);
